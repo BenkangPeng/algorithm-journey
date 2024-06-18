@@ -24,7 +24,6 @@ private:
     }
 public:
     MyQueue() {
-
     }
     
     void push(int x) {

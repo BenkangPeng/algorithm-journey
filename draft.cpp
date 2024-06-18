@@ -167,40 +167,121 @@
 // }
 
 
-struct ListNode {
-    int val;
-    ListNode *next;
-    ListNode() : val(0), next(nullptr) {}
-    ListNode(int x) : val(x), next(nullptr) {}
-    ListNode(int x, ListNode *next) : val(x), next(next) {}
-};
+// struct ListNode {
+//     int val;
+//     ListNode *next;
+//     ListNode() : val(0), next(nullptr) {}
+//     ListNode(int x) : val(x), next(nullptr) {}
+//     ListNode(int x, ListNode *next) : val(x), next(next) {}
+// };
+
+// #include<iostream>
+// #include<vector>
+// class Solution {
+// public:
+//     ListNode* removeNthFromEnd(ListNode* head, int n) {
+//         std::vector<ListNode*> ptr;
+//         ListNode* t = head;
+//         while(t!= nullptr){
+//             ptr.push_back(t);
+//             t = t->next;
+//         }
+
+//         int len = ptr.size();
+
+//         if(len == n){
+//             ListNode* tmp = head;
+//             head = head->next;
+//             delete tmp;
+//             return head;
+//         }
+//         else{
+//             ptr[len-n-1]->next = ptr[len-n]->next;
+//             delete ptr[len-n];
+//             return head;
+//         }
+
+//         return head;
+//     }
+// };
+
+// #include<vector>
+// #include<iostream>
+// using namespace std;
+// class Solution {
+// private:
+//     bool spell(const string& word , int map[26]){
+//         for(char it : word){
+//             if(map[it - 'a'] == 0){
+//                 return false;
+//             }
+//             else{
+//                 map[it - 'a']--;
+//             }
+//         }
+//         return true;
+//     }
+// public:
+//     int countCharacters(vector<string>& words, string chars) {
+//         int ans = 0;
+//         int map[26] = {0};
+//         for(char it : chars){
+//             map[it - 'a']++;
+//         }
+
+//         for(string word : words){
+//             if(spell(word , map))   ans += word.size();
+//         }
+
+//         return ans;
+//     }
+// };
+
+
+// int  main()
+// {
+//     string chars = "atach";
+//     vector<string> words = {"cat","bt","hat","tree"};
+//     Solution s;
+//     int ans = s.countCharacters(words , chars); 
+// }
 
 #include<iostream>
-#include<vector>
+#include<cmath>
+using namespace std;
 class Solution {
+private:
+    bool is_prime(int n){
+        if(n <= 1)  return false;
+        if(n == 2)  return true;
+        if(!(n%2))  return false;
+
+        for(int i = 3 ; i <= (int)sqrt(n) ; i += 2){
+            if(n%i == 0) return false;
+        }
+        return true;
+    }
+
+    bool is_palindrome(int n){
+        int reverse = 0;
+        int _n = n;
+        while(n > 0){
+            int t = n % 10;
+            n /= 10;
+            reverse = reverse * 10 + t;
+        }
+
+        return reverse == _n ? true : false;
+    }
 public:
-    ListNode* removeNthFromEnd(ListNode* head, int n) {
-        std::vector<ListNode*> ptr;
-        ListNode* t = head;
-        while(t!= nullptr){
-            ptr.push_back(t);
-            t = t->next;
-        }
-
-        int len = ptr.size();
-
-        if(len == n){
-            ListNode* tmp = head;
-            head = head->next;
-            delete tmp;
-            return head;
-        }
-        else{
-            ptr[len-n-1]->next = ptr[len-n]->next;
-            delete ptr[len-n];
-            return head;
-        }
-
-        return head;
+    int primePalindrome(int n) {
+        for(int root = )
     }
 };
+
+int main()
+{
+    int n = 6;
+    Solution s;
+    cout << s.primePalindrome(n) << endl; 
+}
