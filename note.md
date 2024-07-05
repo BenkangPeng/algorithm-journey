@@ -168,15 +168,86 @@ public:
 
 
 
+### class019 输入输出
+
+* 填函数风格
+
+例如`leecode`
+
+* acm风格（笔试、比赛最常见）
+
+  * 规定数据量(BufferedReader、StreamTokenizer、PrintWriter)，其他语言有对等的写法
+
+  * 按行读(BufferedReader、PrintWriter)，其他语言有对等的写法(cpp中用printf、scanf比cin、cout更快)
+
+  * 不要用Scanner、System.out，IO效率慢(输出答案要一次输出，不要边运行程序边输出，一旦后台检测到输出，就会开始对比，频繁启动对比耗时比最后一次性进行对比多)。
+
+* 不推荐：临时动态空间(①申请、释放空间耗时；②释放的空间后台仍会记录到内存消耗中：例如，在程序中，先开辟1MB的空间，使用完后释放，再开辟2MB空间，再释放，其实我们使用的空间最大是2MB，但后台不会检测是否释放，会认定使用的空间是3MB)
+
+* 推荐：全局静态空间
 
 
 
 
 
+### class022 归并分治
+
+* 思考一个问题在大范围上的答案，是否等于，左部分的答案 + 右部分的答案 + 跨越左右产生的答案
+* 计算“跨越左右产生的答案”时，如果加上左、右各自有序这个设定，会不会获得计算的便利性
+* 如果以上两点都成立，那么该问题很可能被归并分治解决（话不说满，因为总有很毒的出题人）
+
+
+
+### class025
+
+堆排序的时间复杂度 ==待整理==
+
+
+
+###　class026 比较器
 
 
 
 
+
+#### lambda表达式
+
+语法：
+
+> [捕获列表] (参数列表) -> 返回类型{函数主体}
+>
+> [capture list] (parameter list) -> return type {function body}
+
+
+
+* 捕获列表可以捕获`lambda`表达式外的变量，分为`值捕获`和`引用捕获`
+
+```cpp
+	int x = 10;
+    auto f = [x] (int y) -> int { return x + y; }; // 值捕获 x，相当于执行这一行时复制了一份x的值进入了lambda表达式
+    x = 20; // 修改外部的 x
+    std::cout << f(5) << std::endl; // 输出 15，不受外部 x 的影响
+
+    auto f2 = [&x](int y) {return x + y;} ;  // return type可以省略，由表达式自动推导
+    x = 30;
+    std::cout << f2(5) << std::endl; // 输出35 ， 受外部x的影响
+
+    auto f3 = [&x]() {x++; return 0;};// 引用捕获可以在lamda表达式内修改参数值
+    f3();
+    std::cout << "x = " << x << std::endl;//31
+
+    auto f4 = [&](int y) {return x + y;};//对所有外部变量采用引用捕获
+    auto f5 = [=](int y) {return x + y;};//对所有外部变量采用值捕获
+
+    x = 100;
+
+    std::cout << "f4 : " << f4(5) << std::endl;// 105
+    std::cout << "f5 : " << f5(5) << std::endl;// 36
+
+    int a = 10;
+    auto f6 = [& , a](int y){return x + a + y;};//引用捕获所有除了a的变量，值捕获a
+    auto f7 = [= , &a](int y) {return x + a + y;};//值捕获所有除了a的变量
+```
 
 
 

@@ -34,3 +34,5 @@ class tree_node{
         std::cout << head->val << " " ;
     }
 };
+//时间复杂度：O(N)
+//空间复杂度：O(h)，h为树的高度

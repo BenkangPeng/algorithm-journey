@@ -116,6 +116,39 @@ public:
 class Solution {
 public:
     std::vector<int> postorderTraversal(TreeNode* root) {
+        if(!root)   return {};
 
+        std::stack<TreeNode*> st;
+        TreeNode* h = root;
+        st.push(h);
+        //如果始终没打印过结点，h就一直是头结点root
+        //一旦打印了结点，h就变成打印的结点
+        //之后h的含义：上一次打印的结点
+
+        std::vector<int> ans;
+        while(!st.empty()){
+            TreeNode* cur = st.top();
+            if(cur->left != nullptr && h != cur->left && h != cur->right){
+            //if判断：cur左结点非空，且cur->left不是上一次打印的结点（即cur->left上一次没打印过）
+            //加入h != cur->right判断：如果cur->right是上次打印的结点，按照后序遍历的顺序，cur->left一定被打印过
+            //这个if判断可以总结为：
+            //cur结点有左树，且左树没处理过
+                st.push(cur->left);
+            }
+            else if(cur->right != nullptr && h != cur->right){
+            //cur有右树，且右树没处理过
+                st.push(cur->right);
+            }
+            else{
+            //cur没有左右树，或者左右树已经处理过了
+                ans.push_back(cur->val);
+                h = cur;
+                st.pop();
+            }
+        }
+        return ans;
     }
 };
+
+//时间复杂度：O(N)
+//空间复杂度：O(h)，h为树的高度；因为处理完一层后，空间空闲出来后给可以重复利用

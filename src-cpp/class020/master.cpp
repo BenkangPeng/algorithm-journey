@@ -14,3 +14,11 @@ public:
 };
 
 //master 公式 T(n) = a * T(n/b) + O(n^c)
+//如果 log(b,a) < c , 则复杂度为O(n^c)
+//如果 log(b,a) > c , 则复杂度为O(n^log(b,a))
+//如果 log(b,a) == c , 则复杂度为O(n^c * log(n))
+
+//特例：T(n) = 2 * T(n/b) + O(n * log(n))
+//复杂度：O(n * (logn)^2)
+
+//注意master公式只能用于等规模递归问题
