@@ -713,33 +713,437 @@
 // };
 
 
+// #include<iostream>
+
+// int main()
+// {
+//     int x = 10;
+//     auto f = [x] (int y) -> int { return x + y; }; // 值捕获 x，相当于执行这一行时复制了一份x的值进入了lambda表达式
+//     x = 20; // 修改外部的 x
+//     std::cout << f(5) << std::endl; // 输出 15，不受外部 x 的影响
+
+//     auto f2 = [&x](int y) {return x + y;} ;  // return type可以省略，由表达式自动推导
+//     x = 30;
+//     std::cout << f2(5) << std::endl; // 输出35 ， 受外部x的影响
+
+//     auto f3 = [&x]() {x++; return 0;};// 引用捕获可以在lamda表达式内修改参数值
+//     f3();
+//     std::cout << "x = " << x << std::endl;//31
+
+//     auto f4 = [&](int y) {return x + y;};//对所有外部变量采用引用捕获
+//     auto f5 = [=](int y) {return x + y;};//对所有外部变量采用值捕获
+
+//     x = 100;
+
+//     std::cout << "f4 : " << f4(5) << std::endl;// 105
+//     std::cout << "f5 : " << f5(5) << std::endl;// 36
+
+//     int a = 10;
+//     auto f6 = [& , a](int y){return x + a + y;};//引用捕获所有除了a的变量，值捕获a
+//     auto f7 = [= , &a](int y) {return x + a + y;};//值捕获所有除了a的变量
+
+// }
+
+
+// #include<iostream>
+// #include<vector>
+
+// class heap{
+// private:
+//     void swap(int& a , int& b){
+//         int t = a;
+//         a = b;
+//         b = t;
+//     }
+
+// public:
+//     void heap_insert(std::vector<int>& arr , int i){
+//         while(arr[i] > arr[(i - 1) / 2]){
+//             swap(arr[i] , arr[(i - 1) / 2]);
+//             i = (i - 1) / 2;
+//         }
+//     }
+
+//     void heapify(std::vector<int>& arr , int i , int size){
+//         int l = 2 * i + 1;
+//         while(l < size){
+//             int bigger = (l + 1 < size && arr[l] < arr[l + 1]) ? l + 1 : l;
+//             bigger = arr[bigger] > arr[i] ? bigger : i;
+//             if(bigger == i) break;
+//             swap(arr[bigger] , arr[i]);
+
+//             i = bigger;
+//             l = 2 * i + 1;
+//         }
+//     }
+
+//     void heap_sort1(std::vector<int>& arr){
+//         int n = arr.size();
+//         for(int i = 0 ; i < n ; i++){
+//             heap_insert(arr , i);
+//         }
+
+//         while(n > 1){
+//             swap(arr[0] , arr[--n]);
+//             heapify(arr , 0 , n);
+//         }
+//     }
+
+//     void heap_sort2(std::vector<int>& arr){
+//         int n = arr.size();
+//         for(int i = n - 1 ; i >= 0 ; --i){
+//             heapify(arr , i , n);
+//         }
+
+//         while(n > 1){
+//             swap(arr[0] , arr[--n]);
+//             heapify(arr , 0 , n);
+//         }
+//     }
+// };
+
+
+// #include<iostream>
+// #include<cstdint>
+// #include<random>
+// #include<ctime>
+// #include<cstdlib>
+// void gemm(int32_t v0[8][8] , int32_t v1[8][8] , int32_t v2[8][8] ){
+//     for(int i = 0 ; i < 8 ; i++){
+//         for(int j = 0 ; j < 8 ; j++){
+//             for(int k = 0 ; k < 8 ; k++){
+//                 v2[i][j] += v0[i][k] * v1[k][j];
+//             }
+//         }
+//     }
+// }
+
+// void init(int32_t data[8][8] ){
+//             for(int i = 0 ; i < 8 ; i++){
+//                 for(int j = 0 ; j < 8 ; j++){
+//                     data[i][j] = rand() % 100 - 50; // -50 ~ 50
+//                 }
+//             }
+// }
+
+// void print_matrix(int32_t m[8][8]){
+//     for(int i = 0 ; i < 8 ; ++i){
+//         for(int j = 0 ; j < 8 ; ++j){
+//             std::cout << m[i][j] << ' ';
+//         }
+//         std::cout << std::endl;
+//     }
+// }
+
+// int main()
+// {
+//     srand(time(0));
+//     int32_t A[8][8] , B[8][8] , C[8][8];
+//     init(A[8][8]);
+
+// }
+
+
+
+
+// #include<iostream>
+
+// int add(int a , int b){
+//     return a + b;
+// }
+
+// int sub(int a , int b){
+//     return a - b;
+// }
+
+// void compute_and_print(int (*funct_ptr)(int , int) , int a , int b){
+//     std::cout << "Result: " << funct_ptr(a , b) << std::endl;
+// }
+// int main()
+// {
+//     compute_and_print(add , 3 , 4);
+//     compute_and_print(sub , 3 , 4);
+
+// }
+
+
+// #include<iostream>
+// #include<vector>
+// #include<array>
+// #include<queue>
+// #include<algorithm>
+// bool comparator(int a , int b){
+//     return a > b;
+// }
+// int main()
+// {
+//     // std::array<int , 6> arr = {4, 3, 8, 1, 7, 2};
+//     // // std::sort(arr.begin() , arr.end() , comparator);
+//     // std::sort(arr.begin() , arr.end() , std::greater<int>());
+
+//     // for(auto it : arr){
+//     //     std::cout << it << ' ' ;
+//     // }
+
+//     bool (*func_ptr) (int , int) = comparator;
+//     std::priority_queue<int , std::vector<int> , decltype(func_ptr) > min_heap(func_ptr);
+
+//     for(int i = 10 ; i >= 0 ; i--){
+//         min_heap.push(i);
+//     } 
+
+//     while(!min_heap.empty()){
+//         std::cout << min_heap.top() << ' ';
+//         min_heap.pop();
+//     }
+
+//     return 0;
+
+// }
+
+
+// #include<iostream>
+// #include<string>
+// #include<unordered_map>
+// #include<algorithm>
+// int main()
+// {
+//     std::string s = "hellloooo geek";
+//     std::unordered_map<char , int> cnt;
+//     int n = s.size();
+//     for(int i = 0 ; i < n ; i++){
+//         cnt[s[i]]++;
+//     }
+
+//     auto comparator = [&](char a , char b){
+//         if(cnt[a] == cnt[b]){
+//             return a > b;
+//         }
+//         else{
+//             return cnt[a] > cnt[b];
+//         }
+//     };
+
+//     std::sort(s.begin() , s.end() , comparator);
+//     std::cout << s << std::endl;
+
+// }
+
+
+// #include <iostream>
+// #include <queue>
+// #include <vector>
+
+// // 仿函数用于比较两个元素，以实现小根堆
+// struct MinHeapComparator {
+//     bool operator()(int a, int b) {
+//         return a > b;
+//     }
+// };
+
+// int main() {
+//     // 使用std::priority_queue和MinHeapComparator仿函数创建小根堆
+//     // std::priority_queue<int, std::vector<int>, MinHeapComparator> minHeap;
+//     std::priority_queue<int , std::vector<int> , std::greater<int> > minHeap;
+
+//     // 向小根堆添加元素
+//     minHeap.push(5);
+//     minHeap.push(2);
+//     minHeap.push(8);
+//     minHeap.push(1);
+//     minHeap.push(6);
+
+//     // 打印小根堆
+//     while (!minHeap.empty()) {
+//         std::cout << minHeap.top() << " ";
+//         minHeap.pop();
+//     }
+//     std::cout << std::endl;
+
+//     return 0;
+// }
+
+
+// #include<iostream>
+// #include<vector>
+// #include<queue>
+// using namespace std;
+// struct ListNode {
+//     int val;
+//     ListNode *next;
+//     ListNode() : val(0), next(nullptr) {}
+//     ListNode(int x) : val(x), next(nullptr) {}
+//     ListNode(int x, ListNode *next) : val(x), next(next) {}
+// };
+
+// class Solution {
+// public:
+//     ListNode* mergeKLists(vector<ListNode*>& lists) {
+//         std::priority_queue<ListNode* , std::vector<ListNode*> , std::greater<ListNode*> > min_heap;
+
+//         for(auto it : lists){
+//             if(it != nullptr){
+//                 min_heap.push(it);
+//             }
+//         }
+
+//         if(min_heap.empty())    return nullptr;
+
+//         ListNode* h = min_heap.top();
+//         ListNode* cur = h;
+//         min_heap.pop();
+//         if(h->next != nullptr){
+//             min_heap.push(h->next);
+//         }
+
+//         while(!min_heap.empty()){
+//             ListNode* tmp = min_heap.top();
+//             min_heap.pop();
+//             cur->next = tmp;
+//             cur = cur->next;
+//             if(tmp->next != nullptr){
+//                 min_heap.push(tmp->next);
+//             }
+//         }
+
+//         return h;
+//     }
+// };
+
+
+// int main()
+// {
+//     Solution s;
+
+//     ListNode* h1 = new ListNode(1);
+//     h1->next = new ListNode(4);
+//     h1->next->next = new ListNode(5);
+//     h1->next->next->next = nullptr;
+
+//     ListNode* h2 = new ListNode(1);
+//     h2->next = new ListNode(3);
+//     h2->next->next = new ListNode(4);
+//     h2->next->next->next = nullptr;
+
+//     ListNode* h3 = new ListNode(2);
+//     h3->next = new ListNode(6);
+//     h3->next->next = nullptr;
+
+//     std::vector<ListNode*> lists = {h1 , h2 , h3};
+
+//     ListNode* head = s.mergeKLists(lists);
+
+//     while(head != nullptr){
+//         std::cout << head->val << ' ';
+//         head = head->next;
+//     }
+
+//     return 0;
+// }
+
+
+
 #include<iostream>
+#include<vector>
+#include<algorithm>
+//用数组模拟大根堆试一试？
+class MAX_HEAP{
+    public:
+        double data[100];
+        int size = 0;
+
+        void swap(double& a , double& b){
+            double t = a;
+            a = b;
+            b = t;
+        }
+
+    // public:
+        void push(double x){
+            data[size++] = x;
+            int idx = size - 1;
+            while(data[idx] > data[(idx - 1) / 2]){
+                swap(data[idx] , data[(idx - 1) >> 1]);
+                idx = (idx - 1) >> 1;
+            }
+
+        }
+        
+        void pop(){
+            swap(data[0] , data[--size]);
+            heapify(0);
+        }
+
+        double top(){
+            return data[0];
+        }
+
+        void heapify(int idx){
+            while(idx < size){
+                int l = 2 * idx + 1;
+                int bigger = (l + 1 < size && data[l] < data[l + 1]) ? l+1 : l;
+
+                bigger = data[idx] < data[bigger] ? bigger : idx;
+                if(bigger == idx)   break;
+                
+                swap(data[bigger] , data[idx]);
+                idx = bigger;
+            }
+        }
+
+        bool empty(){
+            return size == 0;
+        }
+};
+class Solution {
+public:
+    int halveArray(std::vector<int>& nums) {
+        // std::priority_queue<double> max_heap;
+        MAX_HEAP max_heap; 
+        double sum = 0;
+        for(auto it : nums){
+            max_heap.push(it);
+            sum += it;
+        }
+
+        double reduce = 0;
+        int step = 0;
+        std::cout << "target: " << sum / 2 << std::endl;
+        while(reduce <  sum / 2){
+            double top = max_heap.top();
+            max_heap.pop();
+            max_heap.push(top / 2);
+            reduce += top / 2;
+            step++;
+
+            std::cout << "  top:  " << top << "  reduce:  " << reduce << "  step:  " << step << std::endl;
+        }
+
+        return step;
+
+    }
+};
 
 int main()
 {
-    int x = 10;
-    auto f = [x] (int y) -> int { return x + y; }; // 值捕获 x，相当于执行这一行时复制了一份x的值进入了lambda表达式
-    x = 20; // 修改外部的 x
-    std::cout << f(5) << std::endl; // 输出 15，不受外部 x 的影响
+    std::vector<int> nums = {92,91,55,74,98,45,94,99,35,28,78,10,27,55,93,93,33,76,14,27,82,11,5,58,96,70,31,6};
+    // 99 98 96 94 93 93 92 91 82 78 76 74 70 58 55 55 45 35 33 31 28 27 27 14 11 10 6 5
+    // std::vector<int> _nums(nums);
+    // std::sort(_nums.begin() , _nums.end() , [&](int a , int b){return a > b;});
+    // for(auto it : _nums){
+    //     std::cout << it << ' ';
+    // }
 
-    auto f2 = [&x](int y) {return x + y;} ;  // return type可以省略，由表达式自动推导
-    x = 30;
-    std::cout << f2(5) << std::endl; // 输出35 ， 受外部x的影响
+    // Solution s;
+    MAX_HEAP max_heap;
+    for(auto it : nums){
+        max_heap.push(it);
+    }
 
-    auto f3 = [&x]() {x++; return 0;};// 引用捕获可以在lamda表达式内修改参数值
-    f3();
-    std::cout << "x = " << x << std::endl;//31
+    while(!max_heap.empty()){
+        std::cout << max_heap.top() << ' ';
+        max_heap.pop();
+    }
 
-    auto f4 = [&](int y) {return x + y;};//对所有外部变量采用引用捕获
-    auto f5 = [=](int y) {return x + y;};//对所有外部变量采用值捕获
-
-    x = 100;
-
-    std::cout << "f4 : " << f4(5) << std::endl;// 105
-    std::cout << "f5 : " << f5(5) << std::endl;// 36
-
-    int a = 10;
-    auto f6 = [& , a](int y){return x + a + y;};//引用捕获所有除了a的变量，值捕获a
-    auto f7 = [= , &a](int y) {return x + a + y;};//值捕获所有除了a的变量
-
+    // std::cout << std::endl << s.halveArray(nums);
 }

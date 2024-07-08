@@ -9,6 +9,16 @@
 #include<queue>
 #include<string>
 
+// bool comparator(const int& a , const int& b){
+//     return a < b;
+// }
+
+struct MyComparator {
+    bool operator()(const int& a, const int& b) const {
+        return a > b; // 通过反向比较来创建小根堆
+    }
+};
+
 int main() {
     // 使用 std::map
     std::map<std::string, int> myMap;
@@ -45,7 +55,7 @@ int main() {
     max_heap.push(4); 
     max_heap.push(5); 
 
-    std::cout << "堆大小：" << max_heap.size() << std::endl;
+    std::cout << "the size of heap:" << max_heap.size() << std::endl;
     while(!max_heap.empty()){
         std::cout << max_heap.top() << ' ';
         max_heap.pop();
@@ -53,6 +63,24 @@ int main() {
     // std::priority_queue的目的就是方便获取优先级最大的值
     // push 、 pop时间复杂度O(logn) , top()：O(1)
 
+
+    std::cout << std::endl << "use comparator to define min_heap" << std::endl;
+
+    std::priority_queue<int , std::vector<int> , MyComparator> my_min_heap;
+
+    my_min_heap.push(1); 
+    my_min_heap.push(1); 
+    my_min_heap.push(2); 
+    my_min_heap.push(2); 
+    my_min_heap.push(3); 
+    my_min_heap.push(4); 
+    my_min_heap.push(5); 
+
+
+    while(!my_min_heap.empty()){
+        std::cout << my_min_heap.top() << ' ';
+        my_min_heap.pop();
+    }
     return 0;
 }
 

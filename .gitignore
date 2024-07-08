@@ -2,3 +2,4 @@
 src-cpp/*/*.exe
 src-cpp/*/*.out
 *.out
+draft.cpp

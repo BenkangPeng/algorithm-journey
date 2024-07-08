@@ -11,7 +11,7 @@ private:
 
     int first , last;
     void partition(std::vector<int>& nums , int l , int r , int x){
-        // if(l >= r)  return;
+        // if(l >= r)  return; 不能加这一行
 
         first = l ;
         last = r;
