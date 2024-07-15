@@ -9,7 +9,7 @@ private:
         int i = l , j = mid + 1;
         int k = l;
         while(i <= mid && j <= r){
-            help[k++] = nums[i] <= nums[j] ? nums[i++] : nums[j++];
+            help[k++] = nums[i] <= nums[j] ? nums[i++] : nums[j++];//两数相等时，先拷贝左边的数，以保证稳定性
 
         }
         while(i <= mid) help[k++] = nums[i++];

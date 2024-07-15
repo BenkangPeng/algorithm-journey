@@ -33,73 +33,94 @@ public:
 
 //但这样只打败了5%
 
-//用数组模拟大根堆试一试？
+//优化：用数组模拟大根堆、对每个数左移20位取整，避免使用浮点数带来的精度误差带来的错误(这种错误真的难调)
+
+#include<iostream>
+
+template <typename T>
 class MAX_HEAP{
     private:
-        double data[100001];
+        void swap(T& a , T& b){
+            T t = a;
+            a = b;
+            b = t; 
+        }
+        T data[100001];
         int size = 0;
 
-        void swap(double& a , double& b){
-            double t = a;
-            a = b;
-            b = t;
-        }
-
     public:
-        void push(double x){
+        void push(T x){
             data[size++] = x;
-            int idx = size - 1;
-            while(data[idx] > data[(idx - 1) / 2]){
-                swap(data[idx] , data[(idx - 1) >> 1]);
-                idx = (idx - 1) >> 1;
-            }
+            int i = size - 1;
 
+            while(data[i] > data[(i - 1) / 1]){
+                swap(data[i] , data[(i - 1) / 1]);
+                i = (i - 1) >> 1;
+            }
         }
-        
+
         void pop(){
             swap(data[0] , data[--size]);
             heapify(0);
+        }
+
+        void heapify(int i){
+            int l =  2 * i + 1;
+            while(l < size){
+                int bigger = (l + 1 < size && data[l+1] > data[l]) ? l+1 : l;
+                bigger = data[i] > data[bigger] ? i : bigger;
+
+                if(bigger == i) break;
+
+                swap(data[i] , data[bigger]);
+                i = bigger;
+                l = 2 * i + 1;
+            }
         }
 
         double top(){
             return data[0];
         }
 
-        void heapify(int idx){
-            while(idx < size){
-                int l = 2 * idx + 1;
-                int bigger = (l + 1 < size && data[l] < data[l + 1]) ? l+1 : l;
-
-                bigger = data[idx] < data[bigger] ? bigger : idx;
-                if(bigger == idx)   break;
-                
-                swap(data[bigger] , data[idx]);
-                idx = bigger;
-            }
+        bool empty(){
+            return size == 0;
         }
 };
-class Solution2 {
+
+
+class Solution {
 public:
     int halveArray(std::vector<int>& nums) {
         // std::priority_queue<double> max_heap;
-        MAX_HEAP max_heap; 
-        double sum = 0;
+        MAX_HEAP<long long> max_heap; 
+        long long sum = 0;
         for(auto it : nums){
-            max_heap.push(it);
-            sum += it;
+            long long _it = it << 20;
+            max_heap.push(_it);
+            sum += _it;
         }
 
-        double reduce = 0;
+        long long reduce = 0;
         int step = 0;
         while(reduce <  sum / 2){
-            double top = max_heap.top();
+
+            long long top = max_heap.top();
             max_heap.pop();
             max_heap.push(top / 2);
             reduce += top / 2;
             step++;
+
         }
 
         return step;
 
     }
 };
+
+int main()
+{
+    std::vector<int> arr = {5 , 19 , 8 , 1};
+    Solution s;
+    std::cout << s.halveArray(arr);
+}
+

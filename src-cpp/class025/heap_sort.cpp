@@ -83,10 +83,11 @@ public:
 
 
 
-// int main()
-// {
-//     std::vector<int> arr = { 4 , 3 , 2 , 1 , 2 , 0 , 1};
-//     arr[1] = 1;
-//     heap H;
-//     H.heapify(arr , 1 , 7);
-// }
+int main()
+{
+    // std::vector<int> arr = { 4 , 3 , 2 , 1 , 2 , 0 , 1};
+    // arr[1] = 1;
+    // heap H;
+    // H.heapify(arr , 1 , 7);
+    
+}
