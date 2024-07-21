@@ -13,25 +13,26 @@ class Solution {
 private:
     ListNode* group_end(ListNode* head , int k){
         //返回以head为起始结点，偏移k个结点后的结点，即k-group的尾
-        ListNode* end = head;
-        while(--k && end != nullptr){//此处偏移不要习惯性地写成了k--
-            end = end->next;
+        ListNode* k_offset = head;
+        while(--k && k_offset != nullptr){//此处偏移不要习惯性地写成了k--
+            k_offset = k_offset->next;
         }
 
-        return end;
+        return k_offset;
     }
 
     void reverse(ListNode* start , ListNode* end){
         //翻转头结点、尾结点为start , end的子链表 
         ListNode* cur = start;
         ListNode* pre = nullptr , *next = nullptr;//pre记录翻转前，当前结点cur的前一个结点
-        while(cur != end->next){
+        ListNode* next_group_start = end->next;//记录cur应该停下的结点,即下一组(k个结点一组)的头结点
+        while(cur != next_group_start){//不能写成cur != end->next , 因为在while中，end->next会改变
             next = cur->next;
             cur->next = pre;
             pre = cur;//为下一个结点做记录 
             cur = next; 
         }
-        start->next = end->next;
+        start->next = next_group_start;
         
     }
 public:
@@ -40,10 +41,10 @@ public:
         if(end == nullptr)  return head;//end == nullptr表示该链表长度不足k，无需翻转
 
         ListNode* start = head;
-        head = end;//先记录整个链表翻转后的头结点
+        head = end;//记录整个链表翻转后的头结点
         reverse(start , end);
 
-        ListNode* last_group_end = start;
+        ListNode* last_group_end = start;//上一组(k个结点为一组)翻转后的尾结点
         start = start->next;
         while(start != nullptr){
             end = group_end(start , k);
