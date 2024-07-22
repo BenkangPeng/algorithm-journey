@@ -458,19 +458,42 @@ int main() {
 
 
 
+### class 034
 
+**`linked list cycleii`证明**
 
+* [142. 环形链表 II - 力扣（LeetCode）](https://leetcode.cn/problems/linked-list-cycle-ii/description/)
 
+* 参考 [题解](https://leetcode.cn/problems/linked-list-cycle-ii/solutions/2832831/jian-ji-qing-xi-yan-jin-de-tu-shi-tui-da-nak2/)
 
+1. 重画链表如下所示，线上有若干个节点。记蓝色慢指针为 `slow`，红色快指针为 `fast`。初始时` slow` 和 `fast` 均在头节点处。
 
+![0208_2.png](images/1715514553-RxQrzr-0208_2.png)
 
+2. `slow` 和 `fast` 同时前进，`fast` 的速度是 `slow` 的两倍。当 `slow` 抵达环的入口处(图中`A`) 时，`fast` 一定在环上(图中B)，如下所示。
 
+![0208_3.png](images/1715514558-mCJsmw-0208_3.png)
 
+其中：
 
+- head 和 A 的距离为 *z*
+- 弧 AB (沿箭头方向) 的长度为 *x*
+- 同理，弧 BA 的长度为 *y*
 
+可得：
 
+- slow 走过的步数为 *z*
+- 设 fast 已经走过了 *k* 个环，*k*≥0，对应的步数为 *z*+*k*(*x*+*y*)+*x*
 
+由fast的速度是slow的两倍，得：$z + k(x+y)+x = 2z$ , 化简得$z = k(x+y)+x$
 
+![0208_4.png](images/1715514562-KmTrNr-0208_4.png)
 
+此时fast在B点，slow在A点，fast与slow的相对速度为1 ， fast只需y个单位时间后即可追上slow ， 即slow走y个单位长度，fast走2y个单位长度。设相遇在 C 点，位置如下所示，可得弧 AC 长度为 *y*。
 
+![0208_5.png](images/1715514566-cEsEBC-0208_5.png)
 
+因为此前x+y 为环长，所以弧 CA 的长度为 x。
+此时我们另用一橙色指针 ptr (pointer) 指向 head，如下所示。并使 ptr 和 slow 保持 1 个单位的速度前进，在经过 z=x+k(x+y) 步后，可在 A 处相遇(slow从C出发，走x + k(x+y)的距离，相当于绕环k圈回到C ， 再走x到A)。
+
+![0208_6.png](images/1715514569-ATwmZT-0208_6.png)
