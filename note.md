@@ -458,7 +458,7 @@ int main() {
 
 
 
-### class 034
+### class034
 
 **`linked list cycleii`证明**
 
@@ -470,30 +470,244 @@ int main() {
 
 ![0208_2.png](images/1715514553-RxQrzr-0208_2.png)
 
-2. `slow` 和 `fast` 同时前进，`fast` 的速度是 `slow` 的两倍。当 `slow` 抵达环的入口处(图中`A`) 时，`fast` 一定在环上(图中B)，如下所示。
+2. `slow` 和 `fast` 同时前进，`fast` 的速度是 `slow` 的两倍(`fast`一次跨过两个结点)。当 `slow` 抵达环的入口处(图中`A`) 时，`fast` 一定在环上(图中`B`)，如下所示。
 
 ![0208_3.png](images/1715514558-mCJsmw-0208_3.png)
 
-其中：
+图中：
 
-- head 和 A 的距离为 *z*
-- 弧 AB (沿箭头方向) 的长度为 *x*
-- 同理，弧 BA 的长度为 *y*
+- `head` 和 `A` 的距离为 `z`
+- 弧 `AB` (沿箭头方向) 的长度为 `x`
+- 同理，弧 `BA` 的长度为 `y`
 
 可得：
 
-- slow 走过的步数为 *z*
-- 设 fast 已经走过了 *k* 个环，*k*≥0，对应的步数为 *z*+*k*(*x*+*y*)+*x*
+- `slow` 走过的距离为 `z`
+- 设 `fast` 已经走过了 `k`个环，$k≥0$，对应的距离为 $z+k(x+y)+x$
 
-由fast的速度是slow的两倍，得：$z + k(x+y)+x = 2z$ , 化简得$z = k(x+y)+x$
+由`fast`的速度是`slow`的两倍，得：$z + k(x+y)+x = 2z$ , 化简得$z = k(x+y)+x$
 
 ![0208_4.png](images/1715514562-KmTrNr-0208_4.png)
 
-此时fast在B点，slow在A点，fast与slow的相对速度为1 ， fast只需y个单位时间后即可追上slow ， 即slow走y个单位长度，fast走2y个单位长度。设相遇在 C 点，位置如下所示，可得弧 AC 长度为 *y*。
+此时`fast`在`B`点，`slow`在`A`点，`fast`与`slow`的相对速度为1 ，` fast`只需`y`个单位时间后即可**追上**`slow` ， 即`slow`走`y`个单位长度，`fast`走`2y`个单位长度。设相遇在 `C` 点，位置如下所示，可得弧 `AC `长度为` y`。
 
 ![0208_5.png](images/1715514566-cEsEBC-0208_5.png)
 
-因为此前x+y 为环长，所以弧 CA 的长度为 x。
-此时我们另用一橙色指针 ptr (pointer) 指向 head，如下所示。并使 ptr 和 slow 保持 1 个单位的速度前进，在经过 z=x+k(x+y) 步后，可在 A 处相遇(slow从C出发，走x + k(x+y)的距离，相当于绕环k圈回到C ， 再走x到A)。
+因为此前`x+y` 为环长，所以弧 `CA` 的长度为 `x`。
+此时我们另用一橙色指针 `ptr` (pointer) 指向 `head`，如下所示。并使 `ptr` 和 `slow` 保持 1 个单位的速度前进，在经过 $z=x+k(x+y)$ 步后，可在 `A` 处相遇(`slow`从C出发，走$x + k(x+y)$的距离，相当于绕环`k`圈回到C ， 再走`x`到A)。证毕。
 
 ![0208_6.png](images/1715514569-ATwmZT-0208_6.png)
+
+```cpp
+#include<iostream>
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(nullptr) {}
+};
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        if(head == nullptr || head->next == nullptr)    return nullptr;
+
+        ListNode* fast = head , *slow = head;
+        do
+        {
+            slow = slow->next;
+            fast = fast->next->next;
+            if(fast == nullptr || fast->next == nullptr)    return nullptr;
+        } while (slow != fast);
+
+        //以上的循环不要写成：(好傻逼，这个循环一次都运行不了，因为赋值后，fast = slow = head)
+        // while(fast != slow){
+        //     if(fast->next == nullptr || fast->next->next == nullptr)    return nullptr;
+
+        //     fast = fast->next->next;
+        //     slow = slow->next;
+        // }
+        
+
+        ListNode* ptr = head;
+        while(ptr != slow){
+            ptr = ptr->next;
+            slow = slow->next;
+        }
+
+        return ptr;
+    }
+};
+```
+
+
+
+
+
+### class035
+
+[895. 最大频率栈 - 力扣（LeetCode）](https://leetcode.cn/problems/maximum-frequency-stack/description/)
+
+![最大频率栈](./images/class035最大频率栈.jpg)
+
+如上图，依次向`最大频率栈`中加入`a , b , c , d` , 同时更新`val_cnt` , `times_cnt` , `top_times` : 
+
+* `val_cnt` : `std::unordered_map<int,int>`  ,  `times_cnt` : `std::unordered_map<int , std::vector<int>>`
+* 加入第一个`a`时，`val_cnt`中记录`a`的词频为1 ， `top_times`为1(表示此时最大的词频是1) ， 同时`times_cnt`中`times = 1`对应的那一层`vector`中加入`a` 。 
+* `times_cnt`中每一层的`vector`存储着入栈时词频为`times`的所有元素，例如，`times_cnt[1] = {a , b}` , 表示`a , b`这两个元素在入栈时的词频均为1；`times_cnt[2] = {a , b}` , 表示`a,b`这两个元素(与之前的`a,b`不同)在入栈时，词频均为2。
+* `pop`操作：要让词频最高、若词频相同则后入栈优先的元素出栈，只需返回`times_cnt[top_times].back()`，即词频最大值对应的`vector`的最后一个元素。同时注意：①将`val_cnt`中对应词频减1；②更新`top_times`：若`times_cnt[top_times]`在弹出元素后为空，应删除此键值对，并将`top_times`减1。
+
+
+
+[432. 全 O(1) 的数据结构 - 力扣（LeetCode）](https://leetcode.cn/problems/all-oone-data-structure/description/)
+
+* 这个题是[146. LRU 缓存](https://leetcode.cn/problems/lru-cache/description/) 的进阶，思路相似。
+
+  <img src="images/class035-all-O(1).png" alt="class035-all-O(1)" style="zoom: 25%;" />
+
+​    
+
+* 定义一个桶`bucket`，其中成员变量有**词频**(`int`)、以及**对应词频的字符串**(使用`std::unordered_set<std::string>`存储)。例如上图中双向链表第二个结点表示：字符串`c`的词频为`1`；第三个结点表示：字符串`a`和`b`的词频均为2。`bucket`构成双向链表的结点，双向链表的头结点、尾结点(`head,tail`)分别是词频为`0`和`INT_MAX`的`bucket`，其中字符串均为空。给双向链表添加`head` `tail`一方面是可以满足题目要求返回`""` , 另一方面可以方便`insert`、`remove`函数的书写(不用去考虑结点在头、尾的边界条件)
+
+* 使用`std::unordered_map<std::string , bucket*> str_addr`构建字符串与对应桶地址的键值对。例如`str_addr[a]`指向双向链表中**第三个结点**。
+
+* 那么，向该数据结构中加入、删除字符串的过程，就是维护`str_addr`和双向链表的过程。
+
+* 加入字符串分为以下情况：①该字符串是新的(即当前数据结构中不存在该字符串)。②该字符串是老的(即当前数据结构中存在该字符串)。
+
+  * 新字符串
+
+  新字符串词频为1，将字符串加入词频为1的桶中。若无词频为1的桶，则新建桶后再加入。
+
+  ```cpp
+  if(str_addr.find(key) == str_addr.end()){//没找到该字符串,新字符串
+              if(head->next->cnt != 1){//没有词频为1的桶
+                  bucket* tmp = new bucket(key , 1);//新建词频为1的桶
+                  insert(head , tmp);//insert自定义函数，将词频为1的桶插入head结点后
+                  str_addr[key] = tmp;//记录新字符串存储位置(桶的地址)
+              }
+              else{//有词频为1的桶，直接加入即可
+                  head->next->set.insert(key);
+                  str_addr[key] = head->next;
+              }
+               
+          }
+  ```
+
+  * 旧字符串
+
+  若加入的字符串已存在，则使用`str_addr`查出字符串在桶的地址，将该字符串从该桶中移除，加入`词频+1`的桶中(若无该桶，则新建桶再加入)。例如加入字符串`a`，则将`a`从**词频为2**的桶中移除，新建**词频为3**的桶，将`a`加入该桶中。
+
+  ```cpp
+  else{//有这个字符串，旧字符串
+              bucket* key_addr = str_addr[key];//找出该字符串存在哪个桶里
+              if(key_addr->cnt + 1 != key_addr->next->cnt){//没有cnt + 1的桶，就新建一个
+                  bucket* tmp = new bucket(key , key_addr->cnt + 1);
+                  insert(key_addr , tmp);
+              }
+              
+              key_addr->set.erase(key);
+              key_addr->next->set.insert(key);
+              str_addr[key] = key_addr->next;
+              if(key_addr->set.empty()){//如果桶已经空了，则删除桶
+                  remove(key_addr);
+              }
+          }
+  ```
+
+
+
+* 从数据结构中删除字符串：①若该字符串词频为1，则直接将其从词频为1的桶中移除即可；②该字符串词频大于1，则将该字符串移到`词频-1`的桶中(若无桶，则建桶).
+
+  ```cpp
+  void dec(string key) {
+          bucket* key_addr = str_addr[key];
+          if(key_addr->cnt == 1){//若该字符串词频为1，则直接将其从词频为1的桶中移除即可
+              str_addr.erase(key);
+          }
+          else{// 该字符串词频大于1，则将该字符串移到`词频-1`的桶中
+              if(key_addr->cnt - 1 == key_addr->last->cnt){
+                  key_addr->last->set.insert(key);
+                  str_addr[key] = key_addr->last;
+              }
+              else{
+                  bucket* tmp = new bucket(key , key_addr->cnt - 1);//新建词频为cnt-1的桶
+                  insert(key_addr->last , tmp);
+                  str_addr[key] = tmp;
+              }
+          }
+  
+  
+          key_addr->set.erase(key);//从原桶中移除该字符串
+          if(key_addr->set.empty()){//若移除后，桶空了，则删除桶
+              remove(key_addr);
+          }
+      }
+  ```
+
+
+
+* `getMaxKey、getMinKey`
+
+```cpp
+string getMaxKey() {
+        return *(tail->last->set.begin());
+    }
+    
+    string getMinKey() {
+        return *(head->next->set.begin());
+    }
+```
+
+**总结**
+
+* 我们对这道题做**退一步的简化** ：如果**不用设计**该数据结构的`dec`方法，那么这道题如何解？
+
+该数据结构要满足：`inc`方法添加字符串，`getMaxKey` `getMinKey`分别返回词频最大、最小的字符串
+
+那么，只需要一个哈希表记录词频，`string`变量`MaxKey`、`MinKey`记录词频最大、最小的字符串即可(代码如下，未验证正确性)：
+
+```cpp
+#include<string>
+#include<unordered_map>
+using namespace std;
+class AllOne {
+private:
+    unordered_map<string , int> key_cnt;
+    string max_key;
+    string min_key;
+    int max_cnt = 0 , min_cnt = INT_MAX;
+public:
+    AllOne():max_key("") , min_key("") {
+
+    }
+    
+    void inc(string key) {
+        key_cnt[key]++;
+        if(key_cnt[key] > max_cnt){
+            max_key = key;
+            max_cnt = key_cnt[key];
+        }
+
+        if(key_cnt[key] < min_cnt){
+            min_cnt = key_cnt[key];
+            min_key = key;
+        }
+
+    }
+    
+    // void dec(string key) {
+
+    // }
+    
+    string getMaxKey() {
+        return max_key;
+    }
+    
+    string getMinKey() {
+        return min_key;
+    }
+};
+```
+
+因为不涉及到删除该数据结构中字符串的操作`dec`，因此只需要对新加入的字符串进行判断即可。但如果该数据结构存在字符串的删除这一操作，则需要去解决一个问题：如果当前最大词频的字符串被删除了，如果找到新的最大词频的字符串？这一问题往往用**双向链表**解决。
+
+* ①要得到最大、最小值(不一定是值的最大最小，还可能是词频的大小)、②要求复杂度$O(1)$ 、③数据流期间有元素的删除。有以上三个要求的数据结构，似乎都要借助双向链表来解决。比如之前的`lru`那道题，还有我自己想了一道题：一个数据结构可以用`add`方法进数，同时也可以随时用`dec`方法删除数据，如何实时获得最大、最小值？这也和上面简化后获取词频最大最小的字符串一样的思路。
