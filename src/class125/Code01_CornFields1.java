@@ -54,25 +54,35 @@ public class Code01_CornFields1 {
 		br.close();
 	}
 
+	// 时间复杂度O(n * 2的m次方 * 2的m次方)
 	public static int compute() {
 		for (int i = 0; i < n; i++) {
 			for (int s = 0; s < maxs; s++) {
 				dp[i][s] = -1;
 			}
 		}
-		return dp(0, 0);
+		return f(0, 0);
 	}
 
-	public static int dp(int i, int s) {
+	public static int f(int i, int s) {
 		if (i == n) {
 			return 1;
 		}
-		return dfs(i, 0, s, 0);
+		if (dp[i][s] != -1) {
+			return dp[i][s];
+		}
+		int ans = dfs(i, 0, s, 0);
+		dp[i][s] = ans;
+		return ans;
 	}
 
+	// 当前来到i行j列
+	// i-1行每列种草的状况s
+	// i行每列种草的状况ss
+	// 返回后续有几种方法
 	public static int dfs(int i, int j, int s, int ss) {
 		if (j == m) {
-			return dp(i + 1, ss);
+			return f(i + 1, ss);
 		}
 		int ans = dfs(i, j + 1, s, ss);
 		if (grid[i][j] == 1 && (j == 0 || get(ss, j - 1) == 0) && get(s, j) == 0) {
@@ -81,10 +91,12 @@ public class Code01_CornFields1 {
 		return ans;
 	}
 
+	// 得到状态s中j位的状态
 	public static int get(int s, int j) {
 		return (s >> j) & 1;
 	}
 
+	// 状态s中j位的状态设置成v，然后把新的值返回
 	public static int set(int s, int j, int v) {
 		return v == 0 ? (s & (~(1 << j))) : (s | (1 << j));
 	}
